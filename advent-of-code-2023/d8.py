@@ -21,8 +21,54 @@ while point != "ZZZ":
 print(idx)
 
 # part 2
-# Applied the above to it but it was slow
-# Something to do with cycles?
-# For a given node, if we encounter the same node twice,  we are not guaranteed the
-# same instructions again to keep the cycle going.
-# Is the cycle guaranteed to have the same length as the number of instructions?
+# - when printing how long it takes to get from ??A -> ??Z from each 1 node, we see that its cyclic. Once you get to that Z, you get back to it
+# again after the same number of instructions (not it also takes that # to get there in the first place)
+# - once you have a list of cycle lengths, find the least-common-multiple / LCM
+# - had to look up how to do GCD
+
+
+def path(point):
+    idx = 0
+    yield point
+    while True:
+        instruction = instructions[idx]
+        idx = (idx + 1) % len(instructions)
+        point = nodes[point][instruction]
+        yield point
+
+
+a_nodes = [node for node in nodes if node.endswith("A")]
+cycle_lengths = []
+for a_node in a_nodes:
+    print(f"Starting search for {a_node}")
+    s = dict()
+    for idx, pt in enumerate(path(a_node)):
+        if pt in s:
+            if pt.endswith("Z"):
+                print(pt, s[pt], idx, idx - s[pt])
+                cycle_lengths.append(idx - s[pt])
+                break
+            s[pt] = idx
+        elif pt not in s:
+            s[pt] = idx
+
+print(cycle_lengths)
+
+
+def gcd(a, b):
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
+
+
+def lcm(a, b):
+    if b > a:
+        a, b = b, a
+    return (a * b) / (gcd(a, b))
+
+
+lc = cycle_lengths[0]
+for clen in cycle_lengths[1:]:
+    lc = lcm(lc, clen)
+print(lc)
