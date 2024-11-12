@@ -1,4 +1,4 @@
-groups = open("d5.in").read().split("\n\n")
+groups = open("d5.t pin").read().split("\n\n")
 original_positions = [int(val) for val in groups[0].split(" ")[1:]]
 
 ranges = []

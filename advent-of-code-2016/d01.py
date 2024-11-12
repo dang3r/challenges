@@ -1,17 +1,11 @@
-
 vectors = open("01.in").read().split(", ")
 
-home_found = False
+NORTH, SOUTH, EAST, WEST = range(4)
+heading = NORTH
+heading_to_vec = {NORTH: (0, 1), SOUTH: (1, 0), EAST: (0, -1), WEST: (-1, 0)}
 x, y = 0, 0
-seen = set()
-seen.add((x,y))
-heading_to_vec = {
-    0: (0,1),
-    1: (1,0),
-    2: (0,-1),
-    3: (-1,0)
-}
-heading = 0
+seen = set([(x, y)])
+home_found = False
 next_heading = lambda d: (heading + (1 if d == "R" else -1)) % 4
 
 for vector in vectors:
@@ -21,12 +15,12 @@ for vector in vectors:
     vec = heading_to_vec[heading]
 
     if not home_found:
-        for idx in range(1, steps+1):
-            new_x, new_y = x+idx*vec[0], y+idx*vec[1]
+        for idx in range(1, steps + 1):
+            new_x, new_y = x + idx * vec[0], y + idx * vec[1]
             if (new_x, new_y) in seen:
                 print(f"P2 ({new_x}, {new_y})", abs(new_x) + abs(new_y))
                 home_found = True
             seen.add((new_x, new_y))
-    x, y = (x+steps*vec[0], y+steps*vec[1])
+    x, y = (x + steps * vec[0], y + steps * vec[1])
 
 print("P1", abs(x) + abs(y))
