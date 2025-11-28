@@ -24,7 +24,4 @@ raw_total = sum(len(line) for line in lines)
 str_total = sum(str_len(line) for line in lines)
 enc_total = sum(re_encoded_len(line) for line in lines)
 print(raw_total - str_total)
-
-print(re_encoded_len(r'"\x27"'))
-
 print(enc_total - raw_total)
