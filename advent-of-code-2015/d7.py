@@ -2,12 +2,12 @@ import re
 import collections
 
 lines = open("d7.in").read().splitlines()
-node_to_deps = collections.defaultdict(list)
 
 
 def do(lines):
     inst = dict()
     v = dict()
+    node_to_deps = collections.defaultdict(list)
 
     def transform(m):
         for el in m.groups():
