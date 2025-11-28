@@ -16,6 +16,15 @@ def str_len(line) -> int:
     return count - 2
 
 
-code_total = sum(len(line) for line in lines)
+def re_encoded_len(line) -> int:
+    return len(line.replace("\\", "\\\\").replace('"', '\\"')) + 2
+
+
+raw_total = sum(len(line) for line in lines)
 str_total = sum(str_len(line) for line in lines)
-print(code_total - str_total)
+enc_total = sum(re_encoded_len(line) for line in lines)
+print(raw_total - str_total)
+
+print(re_encoded_len(r'"\x27"'))
+
+print(enc_total - raw_total)
