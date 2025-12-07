@@ -1,44 +1,43 @@
+import functools
+
+
+def agg(op, vals):
+    vals = [int(val) for val in vals]
+    if op == "*":
+        return functools.reduce(lambda x, y: x * y, vals)
+    elif op == "+":
+        return functools.reduce(lambda x, y: x + y, vals)
+
+
+# p1
 lines = open("d6.in").read().splitlines()
 lines = [line.split() for line in lines]
 cols = len(lines[0])
-
-# p1
 totals = []
 for c in range(cols):
     op = lines[-1][c]
-    start = int(lines[0][c])
-    do = lambda val: start * int(val) if op == "*" else start + int(val)
-    for r in range(1, len(lines) - 1):
-        start = do(lines[r][c])
-    totals += [start]
-
+    values = [lines[r][c] for r in range(len(lines) - 1)]
+    totals += [agg(op, values)]
 print(sum(totals))
 
 # p2
-# added newline to end of last line to make partitioning easier
-lines = open("d6.in").readlines()
+lines = open("d6.in").read().splitlines()
+lines = [line + " " for line in lines]
 st = 0
 totals = []
 for c in range(len(lines[0])):
-    if not all(lines[row][c] in [" ", "\n"] for row in range(len(lines))):
+    if not all(line[c] == " " for line in lines):
         continue
-    segs = [row[st:c] for row in lines]
+    segs = [line[st:c] for line in lines]
     st = c + 1
 
     op = segs[-1].strip()
-    rows = len(segs) - 1
-    cols = len(segs[0])
     sgs = []
-    for col in range(cols):
+    for col in range(len(segs[0])):
         n = ""
-        for row in range(rows):
+        for row in range(len(segs) - 1):
             n += segs[row][col]
         sgs += [int(n)]
-
-    start = int(sgs[0])
-    do = lambda val: start * int(val) if op == "*" else start + int(val)
-    for r in range(1, len(sgs)):
-        start = do(sgs[r])
-    totals += [start]
+    totals += [agg(op, sgs)]
 
 print(sum(totals))
